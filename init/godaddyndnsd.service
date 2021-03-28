@@ -1,0 +1,9 @@
+[Unit]
+Description=Dynamic DNS Update Tool for GoDaddy
+After=network.target
+
+[Service]
+ExecStart=/usr/local/sbin/godaddyndnsd -c /etc/godaddyndnsd.conf
+
+[Install]
+WantedBy=multi-user.target
