@@ -17,7 +17,7 @@ type HostResponse struct {
 	Name string `json:"name"`
 }
 
-func GetGoDaddyGetAddress(key, secret, domain, host string) (net.IP, error) {
+func GoDaddyGetAddress(key, secret, domain, host string) (net.IP, error) {
 	req, err := http.NewRequest("GET", GoDaddyDomainAPIEndpoint(domain, host), nil)
 
 	if err != nil {
@@ -69,7 +69,7 @@ func GetGoDaddyGetAddress(key, secret, domain, host string) (net.IP, error) {
 	return nil, fmt.Errorf("none of the entries matched %s.%s", host, domain)
 }
 
-func GetGoDaddySetAddress(key, secret, domain, host string, address net.IP) error {
+func GoDaddySetAddress(key, secret, domain, host string, address net.IP) error {
 	u := []HostResponse{{Data: address.String()}}
 
 	body := new(bytes.Buffer)

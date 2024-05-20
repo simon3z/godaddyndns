@@ -30,7 +30,7 @@ func CheckAndUpdate() error {
 		return err
 	}
 
-	dnsIP, err := godaddyndns.GetGoDaddyGetAddress(cmdConfig.Key, cmdConfig.Secret, cmdConfig.Domain, cmdConfig.Host)
+	dnsIP, err := godaddyndns.GoDaddyGetAddress(cmdConfig.Key, cmdConfig.Secret, cmdConfig.Domain, cmdConfig.Host)
 
 	if err != nil {
 		return err
@@ -42,7 +42,7 @@ func CheckAndUpdate() error {
 
 	log.Printf("updating %s.%s address from %s to %s", cmdConfig.Host, cmdConfig.Domain, dnsIP.String(), extIP.String())
 
-	err = godaddyndns.GetGoDaddySetAddress(cmdConfig.Key, cmdConfig.Secret, cmdConfig.Domain, cmdConfig.Host, extIP)
+	err = godaddyndns.GoDaddySetAddress(cmdConfig.Key, cmdConfig.Secret, cmdConfig.Domain, cmdConfig.Host, extIP)
 
 	if err != nil {
 		return err
