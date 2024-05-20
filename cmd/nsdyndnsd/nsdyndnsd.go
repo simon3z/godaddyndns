@@ -1,6 +1,6 @@
 package main
 
-// cspell:ignore godaddyndns
+// cspell:ignore nsdyndns
 
 import (
 	"flag"
@@ -9,8 +9,8 @@ import (
 	"net"
 	"time"
 
-	"github.com/simon3z/godaddyndns"
-	"github.com/simon3z/godaddyndns/cmd"
+	"github.com/simon3z/nsdyndns"
+	"github.com/simon3z/nsdyndns/cmd"
 )
 
 var cmdFlags = struct {
@@ -26,7 +26,7 @@ func init() {
 }
 
 func CheckAndUpdate() error {
-	extIP, err := godaddyndns.GetExternalIP()
+	extIP, err := nsdyndns.GetExternalIP()
 
 	if err != nil {
 		return err
@@ -50,7 +50,7 @@ func CheckAndUpdate() error {
 
 	log.Printf("updating %s.%s address from %s to %s", cmdConfig.Host, cmdConfig.Domain, dnsAddrs[0].String(), extIP.String())
 
-	err = godaddyndns.GoDaddySetAddress(cmdConfig.Key, cmdConfig.Secret, cmdConfig.Domain, cmdConfig.Host, extIP)
+	err = nsdyndns.GoDaddySetAddress(cmdConfig.Key, cmdConfig.Secret, cmdConfig.Domain, cmdConfig.Host, extIP)
 
 	if err != nil {
 		return err
@@ -78,7 +78,7 @@ func main() {
 		log.Fatalln(err)
 	}
 
-	log.Printf("starting to monitor external address for %s.%s using %s", cmdConfig.Host, cmdConfig.Domain, godaddyndns.GetExternalIPService())
+	log.Printf("starting to monitor external address for %s.%s using %s", cmdConfig.Host, cmdConfig.Domain, nsdyndns.GetExternalIPService())
 
 	for {
 		go func() {

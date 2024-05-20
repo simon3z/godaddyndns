@@ -1,6 +1,6 @@
-package godaddyndns
+package nsdyndns
 
-// cspell:ignore godaddyndns
+// cspell:ignore nsdyndns
 
 import (
 	"bytes"

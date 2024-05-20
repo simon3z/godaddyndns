@@ -1,6 +1,6 @@
-package godaddyndns
+package nsdyndns
 
-// cspell:ignore godaddyndns ipify
+// cspell:ignore nsdyndns ipify
 
 import (
 	"fmt"

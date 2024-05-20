@@ -3,7 +3,7 @@ Description=Dynamic DNS Update Tool for GoDaddy
 After=network.target
 
 [Service]
-ExecStart=/usr/local/sbin/godaddyndnsd -c /etc/godaddyndnsd.conf
+ExecStart=/usr/local/sbin/nsdyndnsd -c /etc/nsdyndnsd.conf
 
 [Install]
 WantedBy=multi-user.target

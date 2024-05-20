@@ -2,16 +2,16 @@
 
 Installing:
 
-    $ GO111MODULE=on go get -ldflags="-s -w" github.com/simon3z/godaddyndns/cmd/godaddyndnsd
+    $ GO111MODULE=on go get -ldflags="-s -w" github.com/simon3z/nsdyndns/cmd/nsdyndnsd
 
 Cross-compiling for a Raspberry Pi:
 
-    $ GO111MODULE=on GOARCH=arm GOARM=5 go get -ldflags="-s -w" github.com/simon3z/godaddyndns/cmd/godaddyndnsd
+    $ GO111MODULE=on GOARCH=arm GOARM=5 go get -ldflags="-s -w" github.com/simon3z/nsdyndns/cmd/nsdyndnsd
 
 # Usage
 
-    $ godaddyndnsd -h
-    Usage of godaddyndnsd:
+    $ nsdyndnsd -h
+    Usage of nsdyndnsd:
       -c string
             configuration file path
       -i int
@@ -21,30 +21,30 @@ Cross-compiling for a Raspberry Pi:
 
 Checkout the repository and build locally:
 
-    # go build ./cmd/godaddyndnsd
+    # go build ./cmd/nsdyndnsd
 
-Install the godaddyndnsd binary and configuration:
+Install the nsdyndnsd binary and configuration:
 
-    # cp -vi godaddyndnsd /usr/local/sbin/godaddyndnsd
-    # (umask 077 && cp -vi init/godaddyndnsd.conf /etc/godaddyndnsd.conf)
+    # cp -vi nsdyndnsd /usr/local/sbin/nsdyndnsd
+    # (umask 077 && cp -vi init/nsdyndnsd.conf /etc/nsdyndnsd.conf)
 
 Edit the configuration file:
 
-    # vim /etc/godaddyndnsd.conf
+    # vim /etc/nsdyndnsd.conf
 
-Install the godaddyndnsd systemd service:
+Install the nsdyndnsd systemd service:
 
-    # cp -vi init/godaddyndnsd.service /etc/systemd/system/godaddyndnsd.service
+    # cp -vi init/nsdyndnsd.service /etc/systemd/system/nsdyndnsd.service
 
 Reload systemd services:
 
     # systemctl daemon-reload
 
-Enable the godaddyndnsd systemd service:
+Enable the nsdyndnsd systemd service:
 
-    # systemctl start godaddyndnsd.service
-    # systemctl enable godaddyndnsd.service
+    # systemctl start nsdyndnsd.service
+    # systemctl enable nsdyndnsd.service
 
-Check the godaddyndnsd service status:
+Check the nsdyndnsd service status:
 
-    # systemctl status godaddyndnsd.service
+    # systemctl status nsdyndnsd.service
