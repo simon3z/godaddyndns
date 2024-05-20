@@ -16,6 +16,9 @@ type Config struct {
 		Key    string `yaml:"key"`
 		Secret string `yaml:"secret"`
 	}
+	DigitalOcean struct {
+		Token string `yaml:"token"`
+	}
 }
 
 func LoadConfiguration(path string) (*Config, error) {
@@ -49,7 +52,15 @@ type ConfigNameService struct {
 }
 
 func (c *Config) GetNameServices() []*ConfigNameService {
-	return []*ConfigNameService{
-		{"godaddy", nsdyndns.NewGoDaddyService(c.GoDaddy.Key, c.GoDaddy.Secret)},
+	l := []*ConfigNameService{}
+
+	if c.GoDaddy.Key != "" {
+		l = append(l, &ConfigNameService{"godaddy", nsdyndns.NewGoDaddyService(c.GoDaddy.Key, c.GoDaddy.Secret)})
 	}
+
+	if c.DigitalOcean.Token != "" {
+		l = append(l, &ConfigNameService{"digitalocean", nsdyndns.NewDigitalOceanService(c.DigitalOcean.Token)})
+	}
+
+	return l
 }
