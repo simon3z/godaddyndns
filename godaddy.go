@@ -7,7 +7,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"net"
 	"net/http"
 	"os"
@@ -33,7 +32,7 @@ func GetGoDaddyGetAddress(key, secret, domain, host string) (net.IP, error) {
 		return nil, err
 	}
 
-	body, err := ioutil.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
 
 	if err != nil {
 		return nil, err
