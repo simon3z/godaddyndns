@@ -33,3 +33,7 @@ func LoadConfiguration(path string) (*Config, error) {
 
 	return config, nil
 }
+
+func (c *Config) FullDomain() string {
+	return c.Host + "." + c.Domain
+}

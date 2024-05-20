@@ -4,7 +4,9 @@ package main
 
 import (
 	"flag"
+	"fmt"
 	"log"
+	"net"
 	"time"
 
 	"github.com/simon3z/godaddyndns"
@@ -30,17 +32,23 @@ func CheckAndUpdate() error {
 		return err
 	}
 
-	dnsIP, err := godaddyndns.GoDaddyGetAddress(cmdConfig.Key, cmdConfig.Secret, cmdConfig.Domain, cmdConfig.Host)
+	dnsAddrs, err := net.LookupIP(cmdConfig.FullDomain())
 
 	if err != nil {
-		return err
+		return fmt.Errorf("address lookup for %s.%s failed: %w", cmdConfig.Host, cmdConfig.Domain, err)
 	}
 
-	if dnsIP.Equal(extIP) {
+	if len(dnsAddrs) != 1 {
+		return fmt.Errorf("unexpected multiple ip addresses found: %#v", dnsAddrs)
+	}
+
+	if dnsAddrs[0].Equal(extIP) {
 		return nil
 	}
 
-	log.Printf("updating %s.%s address from %s to %s", cmdConfig.Host, cmdConfig.Domain, dnsIP.String(), extIP.String())
+	log.Printf("new external ip address detected: %s", extIP.String())
+
+	log.Printf("updating %s.%s address from %s to %s", cmdConfig.Host, cmdConfig.Domain, dnsAddrs[0].String(), extIP.String())
 
 	err = godaddyndns.GoDaddySetAddress(cmdConfig.Key, cmdConfig.Secret, cmdConfig.Domain, cmdConfig.Host, extIP)
 

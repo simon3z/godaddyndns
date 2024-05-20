@@ -17,58 +17,6 @@ type HostResponse struct {
 	Name string `json:"name"`
 }
 
-func GoDaddyGetAddress(key, secret, domain, host string) (net.IP, error) {
-	req, err := http.NewRequest("GET", GoDaddyDomainAPIEndpoint(domain, host), nil)
-
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Authorization", GoDaddyAuthorization(key, secret))
-	req.Header.Add("Content-Type", "application/json")
-	res, err := http.DefaultClient.Do(req)
-
-	if err != nil {
-		return nil, err
-	}
-
-	body, err := io.ReadAll(res.Body)
-
-	if err != nil {
-		return nil, err
-	}
-
-	if res.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("couldn't retrieve ip address: %s", body)
-	}
-
-	address := []HostResponse{}
-
-	err = json.Unmarshal(body, &address)
-
-	if err != nil {
-		return nil, err
-	}
-
-	if len(address) == 0 {
-		return nil, fmt.Errorf("couldn't find any entry for %s.%s", host, domain)
-	}
-
-	for _, v := range address {
-		if v.Name != host {
-			continue
-		}
-
-		ip := net.ParseIP(v.Data)
-
-		if ip != nil {
-			return ip, nil
-		}
-	}
-
-	return nil, fmt.Errorf("none of the entries matched %s.%s", host, domain)
-}
-
 func GoDaddySetAddress(key, secret, domain, host string, address net.IP) error {
 	u := []HostResponse{{Data: address.String()}}
 
