@@ -9,7 +9,7 @@ import (
 	"io"
 	"net"
 	"net/http"
-	"os"
+	"strings"
 )
 
 type HostResponse struct {
@@ -37,7 +37,15 @@ func GoDaddySetAddress(key, secret, domain, host string, address net.IP) error {
 		return err
 	}
 
-	io.Copy(os.Stdout, res.Body)
+	resBody, err := io.ReadAll(res.Body)
+
+	if err != nil {
+		return err
+	}
+
+	if res.StatusCode != http.StatusOK {
+		return fmt.Errorf("couldn't update ip address: %s", strings.TrimSpace(string(resBody)))
+	}
 
 	return nil
 }
