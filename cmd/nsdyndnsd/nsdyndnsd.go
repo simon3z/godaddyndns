@@ -19,6 +19,7 @@ var cmdFlags = struct {
 }{}
 
 var cmdConfig *cmd.Config
+var cmdServices []*cmd.ConfigNameService
 
 func init() {
 	flag.StringVar(&cmdFlags.ConfigFilePath, "c", "", "configuration file path")
@@ -48,15 +49,17 @@ func CheckAndUpdate() error {
 
 	log.Printf("new external ip address detected: %s", extIP.String())
 
-	log.Printf("updating %s.%s address from %s to %s", cmdConfig.Host, cmdConfig.Domain, dnsAddrs[0].String(), extIP.String())
+	for _, s := range cmdServices {
+		log.Printf("updating %s.%s address from %s to %s using %s", cmdConfig.Host, cmdConfig.Domain, dnsAddrs[0].String(), extIP.String(), s.Name)
 
-	err = nsdyndns.GoDaddySetAddress(cmdConfig.Key, cmdConfig.Secret, cmdConfig.Domain, cmdConfig.Host, extIP)
+		err = s.Service.SetAddress(cmdConfig.Domain, cmdConfig.Host, extIP)
 
-	if err != nil {
-		return err
+		if err != nil {
+			log.Printf("address of %s.%s update using %s failed: %s", cmdConfig.Host, cmdConfig.Domain, s.Name, err)
+		} else {
+			log.Printf("address of %s.%s has been successfully updated to %s using %s", cmdConfig.Host, cmdConfig.Domain, extIP.String(), s.Name)
+		}
 	}
-
-	log.Printf("address of %s.%s has been successfully updated to %s", cmdConfig.Host, cmdConfig.Domain, extIP.String())
 
 	return nil
 }
@@ -77,6 +80,8 @@ func main() {
 	if err != nil {
 		log.Fatalln(err)
 	}
+
+	cmdServices = cmdConfig.GetNameServices()
 
 	log.Printf("starting to monitor external address for %s.%s using %s", cmdConfig.Host, cmdConfig.Domain, nsdyndns.GetExternalIPService())
 

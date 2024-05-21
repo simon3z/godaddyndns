@@ -1,16 +1,21 @@
 package cmd
 
+// cspell:ignore godaddy nsdyndns
+
 import (
 	"os"
 
+	"github.com/simon3z/nsdyndns"
 	"gopkg.in/yaml.v2"
 )
 
 type Config struct {
-	Key    string `yaml:"key"`
-	Secret string `yaml:"secret"`
-	Domain string `yaml:"domain"`
-	Host   string `yaml:"host"`
+	Domain  string `yaml:"domain"`
+	Host    string `yaml:"host"`
+	GoDaddy struct {
+		Key    string `yaml:"key"`
+		Secret string `yaml:"secret"`
+	}
 }
 
 func LoadConfiguration(path string) (*Config, error) {
@@ -36,4 +41,15 @@ func LoadConfiguration(path string) (*Config, error) {
 
 func (c *Config) FullDomain() string {
 	return c.Host + "." + c.Domain
+}
+
+type ConfigNameService struct {
+	Name    string
+	Service nsdyndns.NameService
+}
+
+func (c *Config) GetNameServices() []*ConfigNameService {
+	return []*ConfigNameService{
+		{"godaddy", nsdyndns.NewGoDaddyService(c.GoDaddy.Key, c.GoDaddy.Secret)},
+	}
 }
