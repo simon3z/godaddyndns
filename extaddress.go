@@ -14,19 +14,19 @@ import (
 var externalIPServiceURL = url.URL{Scheme: "https", Host: "api.ipify.org"}
 
 func GetExternalIP() (net.IP, error) {
-	resp, err := http.Get(externalIPServiceURL.String())
+	res, err := http.Get(externalIPServiceURL.String())
 
 	if err != nil {
 		return nil, err
 	}
 
-	body, err := io.ReadAll(resp.Body)
+	body, err := io.ReadAll(res.Body)
 
 	if err != nil {
 		return nil, err
 	}
 
-	if resp.StatusCode != http.StatusOK {
+	if res.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("couldn't retrieve ip address: %s", body)
 	}
 

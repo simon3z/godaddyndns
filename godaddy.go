@@ -83,13 +83,13 @@ func GoDaddySetAddress(key, secret, domain, host string, address net.IP) error {
 
 	req.Header.Add("Authorization", GoDaddyAuthorization(key, secret))
 	req.Header.Add("Content-Type", "application/json")
-	resp, err := http.DefaultClient.Do(req)
+	res, err := http.DefaultClient.Do(req)
 
 	if err != nil {
 		return err
 	}
 
-	io.Copy(os.Stdout, resp.Body)
+	io.Copy(os.Stdout, res.Body)
 
 	return nil
 }
